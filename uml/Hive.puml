@@ -1,0 +1,107 @@
+@startuml Hive
+set namespaceSeparator none
+skinparam linetype polyline
+skinparam linetype ortho
+class "src.bee.member.LiveBee" as src.bee.member.LiveBee {
+  __honey_consumption_multiplier : float
+  __lifespan : int
+  __rest_time : int
+  __starvation_factor : float
+  _starvation_cap : float
+  _starvation_dec_rate : float
+  _starvation_inc_rate : float
+  age
+  honey_consumption
+  honey_consumption_multiplier
+  lifespan
+  rest_time
+  starvation_rate
+  state
+  weight
+  consume_honey()
+  die(reason: DeathReason)
+  update()
+}
+class "src.bee.member.QueenBee" as src.bee.member.QueenBee {
+  _behavior
+  fertility
+  fertility_base : int
+  fertility_max : int
+  honey_consumption_multiplier : float
+  lifespan : float
+  rest_time : int
+  weight : int
+  lay_eggs()
+}
+class "src.common.SimObject" as src.common.SimObject {
+  {abstract}update()
+}
+class "src.common.SimObjectState" as src.common.SimObjectState {
+  {abstract}update()
+}
+class "src.hive.factory.HiveElementFactory" as src.hive.factory.HiveElementFactory {
+  hive
+  create_bee(bee_type: Type[LiveBee]) -> LiveBee
+  create_bee_from_larva(larva: Larva) -> LiveBee
+  create_dead_bee(was: LiveBee, reason: DeathReason) -> DeadBee
+  create_egg(egg_type: Type[BeeEgg]) -> BeeEgg
+}
+class "src.hive.hive.Hive" as src.hive.hive.Hive {
+  __dead_bees_in_grave : Set[DeadBee]
+  __dead_bees_in_hive : Set[DeadBee]
+  __eggs : Set[BeeEgg]
+  __factory
+  __honey_amount
+  __live_bees : Set[LiveBee]
+  __queen_bee
+  _eggs_cap : int
+  _honey_amount_cap : float
+  _honey_take_cap : float
+  all_dead_bees
+  all_dead_bees_reason_count
+  all_dead_bees_was_count
+  dead_bees_in_grave
+  dead_bees_in_hive
+  dead_bees_in_hive_was_count
+  drone_efficiency_factor
+  eggs
+  eggs_status_count
+  honey_amount
+  honey_consumption
+  honey_income
+  live_bees
+  live_bees_type_count
+  queen_bee
+  add_bees(bee_type: Type[_bees_.LiveBee], amount: int)
+  add_eggs(egg_type: Type[_eggs_.BeeEgg], amount: int)
+  bee_died(bee: LiveBee, reason: DeathReason)
+  dead_bee_cleaned(dead_bee: DeadBee)
+  egg_fertilized(egg: BeeEgg)
+  egg_hatched(egg: BeeEgg)
+  larva_transformed(larva: Larva)
+  put_honey(amount: float)
+  take_honey(amount: float)
+  update()
+}
+class "src.bee.member.DeadBee" as src.bee.member.DeadBee {
+  __reason
+  __was
+  reason
+  was
+}
+class "src.egg.member.BeeEgg" as src.egg.member.BeeEgg {
+  is_fertilized
+  state
+  hatch()
+  update()
+}
+src.bee.member.QueenBee --|> src.bee.member.LiveBee
+src.hive.hive.Hive --|> src.common.SimObject
+src.common.SimObjectState "1  " --* "1  " src.bee.member.LiveBee : state
+src.bee.member.QueenBee "1  " --* "1  " src.hive.hive.Hive : __queen_bee
+src.bee.member.LiveBee "0..*  " --* "1  " src.hive.hive.Hive : __live_bees
+src.bee.member.DeadBee "0..*  "--* "1  " src.hive.hive.Hive : __dead_bees_in_grave\n__dead_bees_in_hive
+src.egg.member.BeeEgg "0.*  " --* "1  " src.hive.hive.Hive : __eggs
+src.hive.factory.HiveElementFactory "1  " --* "1  " src.hive.hive.Hive : __factory
+src.hive.hive.Hive "1  " --o "1  "src.hive.factory.HiveElementFactory : hive
+@enduml

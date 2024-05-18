@@ -1,0 +1,121 @@
+@startuml App
+set namespaceSeparator none
+skinparam linetype polyline
+skinparam linetype ortho
+class "main.App" as main.App {
+  _FPS : int
+  _GRAPH_STEEPNESS : int
+  _HEIGHT : int
+  _HIVE_DATA_TRANSFER_EVERY_NTH_FRAME : int
+  _INITIAL_DRONES : int
+  _INITIAL_EGGS : int
+  _INITIAL_HONEY : float
+  _INITIAL_WORKERS : int
+  _WIDTH : int
+  active : bool
+  data
+  hive
+  honey_graph
+  icons
+  draw()
+  draw_bees()
+  draw_dead()
+  draw_eggs()
+  draw_extra()
+  draw_graph_stats()
+  draw_stats()
+  update()
+}
+class "main.Data" as main.Data {
+  all_dead_bees_reason_count : Counter
+  all_dead_bees_was_count : Counter
+  dead_bees_in_hive_count : Counter
+  drones_efficiency : deque
+  eggs_status_count : Counter
+  honey_amount : float
+  honey_consumption : deque
+  honey_income : deque
+  live_bees_type_count : Counter
+  queen_fertility : int
+}
+class "main.Icons" as main.Icons {
+  arrow_down
+  arrow_up
+  arrows
+  bad
+  bee
+  crown
+  d
+  egg
+  grave
+  honey
+  l
+  ok
+  pause
+  play
+  stats
+  tilda
+  trash
+  w
+}
+
+
+class "src.hive.hive.Hive" as src.hive.hive.Hive {
+    ...
+}
+class "src.utils.vec.Vec2" as src.utils.vec.Vec2 {
+  as_tuple
+  length
+  normalized
+  x : Union
+  y : Union
+  __validate(other)
+}
+class "src.utils.vec.Vec3" as src.utils.vec.Vec3 {
+  as_tuple
+  length
+  normalized
+  x : Union
+  y : Union
+  z : Union
+  __validate(other)
+}
+class "src.widgets.graph.Graph" as src.widgets.graph.Graph {
+  __color
+  __graph_data : deque
+  __pos
+  __real_data : deque
+  __size
+  __step : int
+  __y_domain
+  pos
+  size
+  step
+  y_domain
+  __recalc_graph()
+  __remap(value: Number)
+  add_value(value: Number)
+  clear()
+  draw()
+  move(delta: Vec2)
+  resize_height(height: Number)
+  resize_width(width: Number)
+  set_pos(pos: Vec2)
+  set_step(step: int)
+  set_y_domain(min_y: Number, max_y: Number)
+}
+class "src.widgets.icon.Icon" as src.widgets.icon.Icon {
+  __bank : Union[int, pyxel.Image]
+  __size
+  __transparency_key : Optional[Union[int, None]]
+  __uv
+  draw(x: Number, y: Number)
+}
+main.Data "1    " --* "1  " main.App : data
+main.Icons "1  " --* "1  " main.App : icons
+src.hive.hive.Hive "1  " --* "1  " main.App : hive
+src.utils.vec.Vec2 "9  " --* "1  " src.widgets.graph.Graph
+src.utils.vec.Vec3 "1  " --* "1  " src.widgets.graph.Graph : __color
+src.widgets.graph.Graph --* main.App : honey_graph
+src.widgets.icon.Icon "18  " --* "1  " main.Icons
+@enduml
