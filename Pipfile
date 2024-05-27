@@ -5,10 +5,10 @@ name = "pypi"
 
 [packages]
 pyxel = "*"
-pyinstaller = "*"
-pylint = "*"
 
 [dev-packages]
+pyinstaller = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.11"

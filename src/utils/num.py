@@ -30,9 +30,9 @@ def linear_remap(value: Number,
                  to_min: Number, to_max: Number):
 
     if from_min >= from_max:
-        raise ValueError("Required: from_min > from_max")
+        raise ValueError("Required: from_min < from_max")
     if to_min >= to_max:
-        raise ValueError("Required: to_min > to_max")
+        raise ValueError("Required: to_min < to_max")
 
     scale = (value - from_min) / (from_max - from_min)
     return to_min + scale * (to_max - to_min)
