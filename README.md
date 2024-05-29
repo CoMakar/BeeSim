@@ -6,14 +6,21 @@
 # enter the shell
 $ pipenv shell
 
+# ----------------------------
 # install dependencies
 $ pipenv install
 
-# build
-$ pyinstaller main.spec
+# run
+$ python main.py
+# ----------------------------
 
 # | or |
 
-# run
-$ python main.py
+# ----------------------------
+# install dev dependencies
+$ pipenv install --dev
+
+# build
+$ pyinstaller main.spec
+# ----------------------------
 ```
